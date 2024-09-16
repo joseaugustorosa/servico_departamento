@@ -17,6 +17,7 @@ public class Servidor {
     private String nome;
     private String descricao;
     private String ip;
+    private StatusServidor Status;
     private String departamento;
     @Column(name= "DEPARTAMENTO_ID")
     private int departamentoId;

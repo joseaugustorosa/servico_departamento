@@ -1,0 +1,6 @@
+services:
+  eureka:
+    container_name: SERVIDORSERVICE
+    build:
+      context:
+      dockerfile: C:\Faculdade\MICROSSERVIÇOS JAVA\Desenvolvimento de Serviços com Spring Boot\AssessmentJava\servidor-service\Docker

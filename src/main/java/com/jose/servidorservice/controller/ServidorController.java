@@ -1,6 +1,9 @@
 package com.jose.servidorservice.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jose.servidorservice.model.Servidor;
+import com.jose.servidorservice.model.StatusServidor;
+import com.jose.servidorservice.service.CriacaoService;
 import com.jose.servidorservice.service.ServidorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.actuate.endpoint.web.annotation.RestControllerEndpoint;
@@ -18,7 +21,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ServidorController {
     private final ServidorService servidorService;
-
+    private final CriacaoService criacaoService;
     @GetMapping
     public ResponseEntity<List<Servidor>> getAll(@RequestParam(required = false) Optional<String> nome) {
 
@@ -41,9 +44,14 @@ public class ServidorController {
 
     }
     @PostMapping
-    public  ResponseEntity<Servidor>  save(@RequestBody Servidor servidor){
+    public  ResponseEntity<Servidor>  save(@RequestBody Servidor servidor)  {
         System.out.println(servidor.getDepartamento());
-        servidorService.save(servidor);
+        servidor.setStatus(StatusServidor.AGUARDANDO_PROCESSO_CRIACAO);
+        try {
+            criacaoService.CriacaoServidor(servidor);
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(servidor);
+        }
 //        Log log = new Log();
 //        log.setMensagem("Novo servidor criado!");
 //        log.setData(LocalDate.from(LocalDateTime.now()));
